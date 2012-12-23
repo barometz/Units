@@ -54,19 +54,21 @@ let factorConv from_u to_u factor =
 /// accumulated function composition in `acc`.
 let rec recFindConvPath from_u to_u acc n convs : (Datum -> Datum) option = 
     if n = 0 then
+        // Exceeded max search depth.
         None
     else
+        // Fetch everything with the right From unit
+        let partials = List.filter (fun x -> unitEqual from_u x.From) convs
         // Is there a one-step conversion available?
-        let perfect = List.tryFind (fun x -> unitEqual from_u x.From && unitEqual to_u x.To) convs
+        let perfect = List.tryFind (fun x -> unitEqual to_u x.To) partials
         if perfect.IsSome then
             // We do!
             Some(acc >> perfect.Value.Func)
         else 
-            // No perfect match, so look for conversions that have the right From unit
-            let partials = List.filter (fun x -> unitEqual from_u x.From) convs
+            // No perfect match, so recurse - for every conversion that might start a correct chain, 
+            // see whether there's a conversion path from there to the target.
             let result = 
                 partials
-                // Recurse
                 |> List.map (fun x -> recFindConvPath x.To to_u (acc >> x.Func) (n - 1) convs) 
                 |> List.tryFind (fun x -> x.IsSome)
             if result.IsSome then
@@ -94,6 +96,7 @@ let main argv =
             makeConv kelv cels (fun x -> x - 273.15);
             makeConv cels kelv (fun x -> x + 273.15) 
           ]
+
     let convertPrint datum to_u =
         let convfunc = findConvPath datum.Unit to_u conversions
         if convfunc.IsSome then

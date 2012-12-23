@@ -1,0 +1,29 @@
+﻿Possible types of unit conversions:
+
+[unit] being a value in the given unit.
+
+[cm] = [inch] * 2.54
+[inch] = [cm] / 2.54
+[hertz] = 1 / [second]
+
+[meter] = [yard] * 0.90
+[second] = [fortnight] * 1209600
+
+[yard] / [fortnight] = ([meter] / 0.90) / ([second] / 1209600)
+
+[Watt] = [Joule] / [second]
+
+how to describe:
+
+inch:cm n * 2.54	=> cm:inch (1/2.54)
+yard:meter n * 0.90	=> meter:yard (1/0.90)
+
+non-factor conversions:
+
+hertz:second ^-1		=> second:hertz ^(1/-1)
+
+Compound units:
+
+Watt = Joule / second
+
+

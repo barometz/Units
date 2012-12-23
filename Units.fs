@@ -23,15 +23,17 @@ type Unit =
         | Simple(x) -> x
         | Compound(x, y, op) -> 
             match op with
-                | Mult -> sprintf "(%s * %s)" x.ToString y.ToString
-                | Div ->  sprintf "(%s / %s)" x.ToString y.ToString
+            | Mult -> sprintf "(%s * %s)" x.ToString y.ToString
+            | Div ->  sprintf "(%s / %s)" x.ToString y.ToString
 
 /// Test whether two Units are equal.  Should eventually test for equivalence as well.
 let rec unitEqual one two =
     match one, two with
     | Simple(t), Simple(s) -> t = s
     | Compound(u1, v1, o1), Compound(u2, v2, o2) -> 
-        unitEqual u1 u2 && unitEqual v1 v2 && o1 = o2
+        unitEqual u1 u2 
+        && unitEqual v1 v2 
+        && o1 = o2
     | _, _ -> false
 
 type Datum = { Value : float; Unit: Unit }
